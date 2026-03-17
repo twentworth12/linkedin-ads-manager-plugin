@@ -1,0 +1,8 @@
+{
+  "name": "linkedin-ads-manager",
+  "version": "0.1.0",
+  "description": "Programmatic LinkedIn ABM campaign management — clone campaigns, analyze targeting, update budgets, batch pause/resume, audit spend, and search URNs via a Python CLI.",
+  "author": {
+    "name": "Tom Wentworth"
+  }
+}

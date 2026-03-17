@@ -1,0 +1,3 @@
+#!/bin/bash
+# LinkedIn Ads Manager CLI wrapper
+cd "$(dirname "$0")/scripts" && python3 linkedin_cli.py "$@"

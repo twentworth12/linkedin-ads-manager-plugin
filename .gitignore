@@ -1,0 +1,12 @@
+# Credentials
+.credentials
+skills/linkedin-ads-manager/.credentials
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.env
+
+# OS
+.DS_Store
