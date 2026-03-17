@@ -1,48 +1,86 @@
-# LinkedIn Ads Manager Plugin
+# LinkedIn Ads Manager — Claude Cowork Plugin
 
-Programmatic LinkedIn ABM campaign management for Claude. Clone campaigns, analyze targeting, update budgets, batch pause/resume, audit spend, and search URNs — all through conversational commands.
+Manage LinkedIn ad campaigns through natural conversation in Claude. This plugin gives Claude full access to the LinkedIn Ads API so you can run campaigns, audit performance, launch ABM programs, and post content — all by just asking.
 
-## Components
+## What it can do
 
-| Component | Name | Purpose |
-|-----------|------|---------|
-| Skill | `linkedin-ads-manager` | Core CLI + strategic reference docs for LinkedIn campaign management |
-| Command | `/linkedin-setup` | Guided credential configuration |
+**Campaign Management**
+- List, search, and inspect campaigns by name, status, or ID
+- Clone campaigns (great for spinning up new ABM campaigns from a template)
+- Pause and resume campaigns individually or in batch
+- Update budgets and campaign status
 
-## Setup
+**Targeting**
+- Analyze campaign targeting with recommendations for missing titles, skills, and organizations
+- Copy targeting from one campaign to another
+- Search LinkedIn's taxonomy for organization URNs, job titles, and skills
+- Add/remove targeting facets (companies, titles, skills)
 
-After installing the plugin, run `/linkedin-setup` in Claude to configure your credentials. You'll need:
+**Analytics & Reporting**
+- Pull performance metrics (spend, impressions, clicks, conversions) for any date range
+- Generate daily snapshot reports with MTD pacing and alerts for CPC spikes or creative fatigue
+- Run quick operational audits or comprehensive strategic audits with benchmarks
+- Break down performance by campaign group or ad type
 
-1. **A LinkedIn Developer App with Marketing Developer Platform** product
-   - Scopes: `rw_ads`, `r_ads_reporting`
-   - Whitelist your ad account under Products → View Ad Accounts
-2. **A LinkedIn Developer App with Community Management API** product (optional, for posting)
-   - Scope: `w_organization_social`
-3. **Your LinkedIn Ad Account ID**
+**Content Publishing** *(optional)*
+- Post text updates and images to your LinkedIn organization page
+- Upload image and video creatives
 
-Get tokens from: https://www.linkedin.com/developers/apps → your app → Auth → OAuth 2.0 tools
+**Built-in Strategic Knowledge**
+- B2B SaaS advertising best practices, funnel architecture, and benchmarks
+- ABM playbook with proven operational patterns
+- Monthly audit framework with checklists
+- Troubleshooting guide for common API and campaign issues
 
-Alternatively, set environment variables: `LINKEDIN_CAMPAIGNS_TOKEN`, `LINKEDIN_POSTS_TOKEN`, `LINKEDIN_ACCOUNT_ID`.
+## Installation
 
-## Usage
+### 1. Install the plugin in Claude Cowork
 
-Once credentials are configured, just ask Claude naturally:
+Open Claude and run:
 
-- "How are my LinkedIn campaigns doing?"
-- "Clone the ABM template for Acme Corp"
-- "Pause all campaigns for the holiday"
-- "Run a full audit of LinkedIn ad spend"
-- "What's yesterday's daily report?"
+```
+/install-plugin https://github.com/twentworth12/linkedin-ads-manager-plugin
+```
+
+### 2. Set up credentials
+
+After installing, run:
+
+```
+/linkedin-setup
+```
+
+This walks you through creating the required LinkedIn Developer apps and configuring your API tokens. You'll need:
+
+- **A LinkedIn Developer App with the Marketing Developer Platform product**
+  - Scopes: `rw_ads`, `r_ads_reporting`
+  - You must also whitelist your ad account under Products → View Ad Accounts in the developer portal
+- **A LinkedIn Developer App with the Community Management API product** *(optional, for posting content)*
+  - Scope: `w_organization_social`
+- **Your LinkedIn Ad Account ID**
+
+> LinkedIn requires two separate apps because a single app cannot have both the Marketing Developer Platform and Community Management API products enabled.
+
+Get tokens from: [LinkedIn Developer Apps](https://www.linkedin.com/developers/apps) → your app → Auth → OAuth 2.0 tools
+
+Alternatively, set environment variables directly: `LINKEDIN_CAMPAIGNS_TOKEN`, `LINKEDIN_POSTS_TOKEN`, `LINKEDIN_ACCOUNT_ID`.
+
+### 3. Verify
+
+Ask Claude: **"List my LinkedIn campaigns"** — if credentials are configured correctly, you'll see your campaigns.
+
+## Usage examples
+
+Just talk to Claude naturally:
+
+- "How are my LinkedIn campaigns performing this week?"
+- "Clone the ABM template campaign for Acme Corp"
+- "Pause all campaigns for the holiday weekend"
+- "Run a full audit of our LinkedIn ad spend"
+- "What's the daily report for yesterday?"
 - "Find the LinkedIn org ID for Snowflake"
-
-## Reference Docs
-
-The plugin includes strategic reference material:
-
-- **BEST_PRACTICES_B2B_SAAS.md** — Full B2B SaaS playbook with funnel architecture, benchmarks, and case studies
-- **PLAYBOOK.md** — Proven operational patterns for ABM campaigns
-- **AUDIT_FRAMEWORK.md** — Monthly audit checklists and benchmark comparisons
-- **TROUBLESHOOTING.md** — Common errors and solutions
+- "What titles should I add to this campaign's targeting?"
+- "Post this announcement to our company page"
 
 ## Requirements
 
