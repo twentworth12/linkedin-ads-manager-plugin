@@ -1,12 +1,14 @@
 # LinkedIn Ads Manager — Claude Cowork Plugin
 
-Manage LinkedIn ad campaigns through natural conversation in Claude. This plugin gives Claude full access to the LinkedIn Ads API so you can run campaigns, audit performance, launch ABM programs, and post content — all by just asking.
+Manage LinkedIn ad campaigns through natural conversation in Claude. This plugin gives Claude full access to the LinkedIn Ads API so you can create new ads, run campaigns, audit performance, launch ABM programs, and post content — all by just asking.
 
 ## What it can do
 
-**Campaign Management**
+**Campaign & Ad Creation**
+- Create new campaigns and ads from scratch — describe what you want and Claude builds it
+- Clone existing campaigns as templates for new ABM programs
+- Upload image and video creatives to use in new ads
 - List, search, and inspect campaigns by name, status, or ID
-- Clone campaigns (great for spinning up new ABM campaigns from a template)
 - Pause and resume campaigns individually or in batch
 - Update budgets and campaign status
 
@@ -22,9 +24,9 @@ Manage LinkedIn ad campaigns through natural conversation in Claude. This plugin
 - Run quick operational audits or comprehensive strategic audits with benchmarks
 - Break down performance by campaign group or ad type
 
-**Content Publishing** *(optional)*
+**Content & Organic Publishing** *(optional)*
 - Post text updates and images to your LinkedIn organization page
-- Upload image and video creatives
+- Publish video content to your company feed
 
 **Built-in Strategic Knowledge**
 - B2B SaaS advertising best practices, funnel architecture, and benchmarks
@@ -73,6 +75,7 @@ Ask Claude: **"List my LinkedIn campaigns"** — if credentials are configured c
 
 Just talk to Claude naturally:
 
+- "Create a new Sponsored Content campaign targeting DevOps engineers at Acme Corp"
 - "How are my LinkedIn campaigns performing this week?"
 - "Clone the ABM template campaign for Acme Corp"
 - "Pause all campaigns for the holiday weekend"
