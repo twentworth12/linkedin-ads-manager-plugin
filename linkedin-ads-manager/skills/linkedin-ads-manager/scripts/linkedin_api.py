@@ -61,10 +61,13 @@ def _find_creds() -> dict:
     # Check common Cowork project mount points
     if Path("/mnt").exists():
         for mount in Path("/mnt").iterdir():
-            if mount.is_dir():
-                creds = _load_creds_from_env_file(mount / ".env")
-                if creds:
-                    return creds
+            try:
+                if mount.is_dir():
+                    creds = _load_creds_from_env_file(mount / ".env")
+                    if creds:
+                        return creds
+            except (PermissionError, OSError):
+                continue
 
     return {}
 
