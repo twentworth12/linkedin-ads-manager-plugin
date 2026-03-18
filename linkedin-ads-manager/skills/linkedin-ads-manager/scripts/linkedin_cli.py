@@ -33,7 +33,7 @@ Analytics:
 import argparse
 import json
 import sys
-from linkedin_api import LinkedInAdsClient
+from linkedin_api import LinkedInAdsClient, add_project_dir_arg, load_env
 
 class LinkedInCLI:
     def __init__(self):
@@ -1170,6 +1170,7 @@ class LinkedInCLI:
 
 def main():
     parser = argparse.ArgumentParser(description='LinkedIn Ads Manager CLI')
+    add_project_dir_arg(parser)
     subparsers = parser.add_subparsers(dest='command', help='Command to run')
 
     # List command
@@ -1271,6 +1272,7 @@ def main():
     group_parser.add_argument('--performance', action='store_true', help='Include performance metrics')
 
     args = parser.parse_args()
+    load_env(args)
 
     if not args.command:
         parser.print_help()
