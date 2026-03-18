@@ -36,11 +36,10 @@ Get tokens from https://www.linkedin.com/developers/apps → Auth → OAuth 2.0 
 
 ## Usage
 
-Run the CLI wrapper from the skill directory:
+The CLI script lives on a read-only filesystem — always invoke it with `bash` directly (do not use `chmod +x`):
 
 ```bash
-chmod +x ${CLAUDE_PLUGIN_ROOT}/skills/linkedin-ads-manager/linkedin
-${CLAUDE_PLUGIN_ROOT}/skills/linkedin-ads-manager/linkedin [command] [options]
+bash ${CLAUDE_PLUGIN_ROOT}/skills/linkedin-ads-manager/linkedin [command] [options]
 ```
 
 ## Command Reference
@@ -48,43 +47,43 @@ ${CLAUDE_PLUGIN_ROOT}/skills/linkedin-ads-manager/linkedin [command] [options]
 ### Campaign Management
 
 ```bash
-./linkedin list [--name SEARCH] [--status ACTIVE,PAUSED] [--limit 20]
-./linkedin get CAMPAIGN_ID [--json]
-./linkedin clone --source CAMPAIGN --name NEW_NAME [--clone-creatives] [--budget 50]
-./linkedin update-status CAMPAIGN_ID --status PAUSED|ACTIVE|DRAFT
-./linkedin update-budget CAMPAIGN_ID --budget 100
-./linkedin pause-all [--name FILTER] [--dry-run]
-./linkedin resume-all [--dry-run]
+bash ${CLAUDE_PLUGIN_ROOT}/skills/linkedin-ads-manager/linkedin list [--name SEARCH] [--status ACTIVE,PAUSED] [--limit 20]
+bash ${CLAUDE_PLUGIN_ROOT}/skills/linkedin-ads-manager/linkedin get CAMPAIGN_ID [--json]
+bash ${CLAUDE_PLUGIN_ROOT}/skills/linkedin-ads-manager/linkedin clone --source CAMPAIGN --name NEW_NAME [--clone-creatives] [--budget 50]
+bash ${CLAUDE_PLUGIN_ROOT}/skills/linkedin-ads-manager/linkedin update-status CAMPAIGN_ID --status PAUSED|ACTIVE|DRAFT
+bash ${CLAUDE_PLUGIN_ROOT}/skills/linkedin-ads-manager/linkedin update-budget CAMPAIGN_ID --budget 100
+bash ${CLAUDE_PLUGIN_ROOT}/skills/linkedin-ads-manager/linkedin pause-all [--name FILTER] [--dry-run]
+bash ${CLAUDE_PLUGIN_ROOT}/skills/linkedin-ads-manager/linkedin resume-all [--dry-run]
 ```
 
 ### Targeting Operations
 
 ```bash
-./linkedin analyze CAMPAIGN_ID [--recommend]
-./linkedin update-targeting CAMPAIGN_ID [--add-organization ORG_ID] [--add-titles IDS] [--add-skills IDS]
-./linkedin copy-targeting --source CAMPAIGN_ID --target CAMPAIGN_ID
-./linkedin recommend-skills [--campaign-id CAMPAIGN_ID]
+bash ${CLAUDE_PLUGIN_ROOT}/skills/linkedin-ads-manager/linkedin analyze CAMPAIGN_ID [--recommend]
+bash ${CLAUDE_PLUGIN_ROOT}/skills/linkedin-ads-manager/linkedin update-targeting CAMPAIGN_ID [--add-organization ORG_ID] [--add-titles IDS] [--add-skills IDS]
+bash ${CLAUDE_PLUGIN_ROOT}/skills/linkedin-ads-manager/linkedin copy-targeting --source CAMPAIGN_ID --target CAMPAIGN_ID
+bash ${CLAUDE_PLUGIN_ROOT}/skills/linkedin-ads-manager/linkedin recommend-skills [--campaign-id CAMPAIGN_ID]
 ```
 
 ### Search & Discovery
 
 ```bash
-./linkedin find-org "Company Name"
-./linkedin find-skill "Kubernetes"
-./linkedin find-title "DevOps Engineer"
+bash ${CLAUDE_PLUGIN_ROOT}/skills/linkedin-ads-manager/linkedin find-org "Company Name"
+bash ${CLAUDE_PLUGIN_ROOT}/skills/linkedin-ads-manager/linkedin find-skill "Kubernetes"
+bash ${CLAUDE_PLUGIN_ROOT}/skills/linkedin-ads-manager/linkedin find-title "DevOps Engineer"
 ```
 
 ### Analytics
 
 ```bash
-./linkedin performance --campaign-id CAMPAIGN_ID [--days 30]
-./linkedin performance --name "ABM" [--days 7]
-./linkedin daily                                    # Yesterday's snapshot + MTD pacing + alerts
-./linkedin daily --date 2026-03-10                  # Specific date report
-./linkedin daily --month-budget 25000               # Override monthly budget for pacing
-./linkedin audit                                    # Quick operational check
-./linkedin audit-v2                                 # Comprehensive strategic audit
-./linkedin campaign-group --group-id GROUP_ID [--by-type] [--active-only]
+bash ${CLAUDE_PLUGIN_ROOT}/skills/linkedin-ads-manager/linkedin performance --campaign-id CAMPAIGN_ID [--days 30]
+bash ${CLAUDE_PLUGIN_ROOT}/skills/linkedin-ads-manager/linkedin performance --name "ABM" [--days 7]
+bash ${CLAUDE_PLUGIN_ROOT}/skills/linkedin-ads-manager/linkedin daily                                    # Yesterday's snapshot + MTD pacing + alerts
+bash ${CLAUDE_PLUGIN_ROOT}/skills/linkedin-ads-manager/linkedin daily --date 2026-03-10                  # Specific date report
+bash ${CLAUDE_PLUGIN_ROOT}/skills/linkedin-ads-manager/linkedin daily --month-budget 25000               # Override monthly budget for pacing
+bash ${CLAUDE_PLUGIN_ROOT}/skills/linkedin-ads-manager/linkedin audit                                    # Quick operational check
+bash ${CLAUDE_PLUGIN_ROOT}/skills/linkedin-ads-manager/linkedin audit-v2                                 # Comprehensive strategic audit
+bash ${CLAUDE_PLUGIN_ROOT}/skills/linkedin-ads-manager/linkedin campaign-group --group-id GROUP_ID [--by-type] [--active-only]
 ```
 
 ## When to Use Each Command
@@ -105,28 +104,28 @@ ${CLAUDE_PLUGIN_ROOT}/skills/linkedin-ads-manager/linkedin [command] [options]
 ### Launch ABM Campaign for New Account
 
 ```bash
-./linkedin find-org "Company Name"
-./linkedin clone --source TEMPLATE_CAMPAIGN --name "ABM_CompanyName" --clone-creatives
-./linkedin update-targeting NEW_ID --add-organization ORG_ID --org-name "Company Name"
-./linkedin analyze NEW_ID
+bash ${CLAUDE_PLUGIN_ROOT}/skills/linkedin-ads-manager/linkedin find-org "Company Name"
+bash ${CLAUDE_PLUGIN_ROOT}/skills/linkedin-ads-manager/linkedin clone --source TEMPLATE_CAMPAIGN --name "ABM_CompanyName" --clone-creatives
+bash ${CLAUDE_PLUGIN_ROOT}/skills/linkedin-ads-manager/linkedin update-targeting NEW_ID --add-organization ORG_ID --org-name "Company Name"
+bash ${CLAUDE_PLUGIN_ROOT}/skills/linkedin-ads-manager/linkedin analyze NEW_ID
 ```
 
 ### Fix Underperforming Campaign
 
 ```bash
-./linkedin analyze CAMPAIGN_ID
-./linkedin copy-targeting --source WINNING_ID --target CAMPAIGN_ID
-./linkedin update-targeting CAMPAIGN_ID --add-organization ORG_ID --org-name "Company Name"
+bash ${CLAUDE_PLUGIN_ROOT}/skills/linkedin-ads-manager/linkedin analyze CAMPAIGN_ID
+bash ${CLAUDE_PLUGIN_ROOT}/skills/linkedin-ads-manager/linkedin copy-targeting --source WINNING_ID --target CAMPAIGN_ID
+bash ${CLAUDE_PLUGIN_ROOT}/skills/linkedin-ads-manager/linkedin update-targeting CAMPAIGN_ID --add-organization ORG_ID --org-name "Company Name"
 ```
 
 ### Batch Pause for Holidays
 
 ```bash
-./linkedin pause-all --dry-run
-./linkedin pause-all
+bash ${CLAUDE_PLUGIN_ROOT}/skills/linkedin-ads-manager/linkedin pause-all --dry-run
+bash ${CLAUDE_PLUGIN_ROOT}/skills/linkedin-ads-manager/linkedin pause-all
 # ... after holiday ...
-./linkedin resume-all --dry-run
-./linkedin resume-all
+bash ${CLAUDE_PLUGIN_ROOT}/skills/linkedin-ads-manager/linkedin resume-all --dry-run
+bash ${CLAUDE_PLUGIN_ROOT}/skills/linkedin-ads-manager/linkedin resume-all
 ```
 
 ## Reference Documents
