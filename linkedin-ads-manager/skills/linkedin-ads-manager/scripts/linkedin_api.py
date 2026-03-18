@@ -2,12 +2,72 @@
 """
 LinkedIn Ads API Client
 Handles authentication and API calls for campaign management
+
+Credential lookup order:
+1. Environment variables (LINKEDIN_CAMPAIGNS_TOKEN, LINKEDIN_POSTS_TOKEN, LINKEDIN_ACCOUNT_ID)
+2. .env file in --project-dir (if provided via add_project_dir_arg / load_env)
+3. .env file in the current working directory
+4. .env files in common Cowork project mount points (/mnt/*)
 """
 
 import os
 import requests
 import json
+import argparse
+import sys
 from pathlib import Path
+
+
+def add_project_dir_arg(parser: argparse.ArgumentParser) -> None:
+    """Add the --project-dir argument to any script's parser."""
+    parser.add_argument(
+        "--project-dir",
+        help="Path to the project folder containing the .env file",
+    )
+
+
+def _load_creds_from_env_file(path: Path) -> dict:
+    creds = {}
+    if path.exists():
+        try:
+            for line in path.read_text().splitlines():
+                line = line.strip()
+                if not line or line.startswith("#") or "=" not in line:
+                    continue
+                key, value = line.split("=", 1)
+                key = key.strip()
+                if key in ("LINKEDIN_CAMPAIGNS_TOKEN", "LINKEDIN_POSTS_TOKEN", "LINKEDIN_ACCOUNT_ID"):
+                    creds[key] = value.strip().strip('"').strip("'")
+        except OSError:
+            pass
+    return creds
+
+
+def load_env(args: argparse.Namespace) -> None:
+    """Load credentials from the .env file in --project-dir if provided."""
+    if getattr(args, "project_dir", None):
+        creds = _load_creds_from_env_file(Path(args.project_dir) / ".env")
+        for key, value in creds.items():
+            if not os.environ.get(key):
+                os.environ[key] = value
+
+
+def _find_creds() -> dict:
+    # Check current working directory
+    creds = _load_creds_from_env_file(Path.cwd() / ".env")
+    if creds:
+        return creds
+
+    # Check common Cowork project mount points
+    if Path("/mnt").exists():
+        for mount in Path("/mnt").iterdir():
+            if mount.is_dir():
+                creds = _load_creds_from_env_file(mount / ".env")
+                if creds:
+                    return creds
+
+    return {}
+
 
 class LinkedInAdsClient:
     def __init__(self):
@@ -15,50 +75,30 @@ class LinkedInAdsClient:
         self.campaigns_token = None
         self.posts_token = None
         self.account_id = None
-        self.load_credentials()
+        self._load_credentials()
 
-    def load_credentials(self):
-        """Load credentials from persistent config, .env file, legacy .credentials, or environment variables"""
-        import os
+    def _load_credentials(self):
+        # Check environment variables first, then scan for .env files
+        creds = _find_creds()
 
-        # Priority order: persistent config > project .env > local .credentials
-        persistent_file = Path.home() / '.config' / 'linkedin-ads' / '.credentials'
-        project_root = Path(__file__).parent.parent.parent.parent
-        env_file = project_root / '.env'
-        legacy_file = Path(__file__).parent / '.credentials'
-
-        creds_file = None
-        for candidate in [persistent_file, env_file, legacy_file]:
-            if candidate.exists():
-                creds_file = candidate
-                break
-
-        if creds_file:
-            with open(creds_file) as f:
-                for line in f:
-                    line = line.strip()
-                    if line.startswith('#') or not line or '=' not in line:
-                        continue
-                    key, value = line.split('=', 1)
-                    if key == 'LINKEDIN_CAMPAIGNS_TOKEN':
-                        self.campaigns_token = value
-                    elif key == 'LINKEDIN_POSTS_TOKEN':
-                        self.posts_token = value
-                    elif key == 'LINKEDIN_ACCOUNT_ID':
-                        self.account_id = value
-
-        # Fall back to environment variables (for Claude Code web/Slack sessions)
-        if not self.campaigns_token:
-            self.campaigns_token = os.environ.get('LINKEDIN_CAMPAIGNS_TOKEN')
-        if not self.posts_token:
-            self.posts_token = os.environ.get('LINKEDIN_POSTS_TOKEN')
-        if not self.account_id:
-            self.account_id = os.environ.get('LINKEDIN_ACCOUNT_ID')
+        self.campaigns_token = os.environ.get("LINKEDIN_CAMPAIGNS_TOKEN") or creds.get("LINKEDIN_CAMPAIGNS_TOKEN")
+        self.posts_token = os.environ.get("LINKEDIN_POSTS_TOKEN") or creds.get("LINKEDIN_POSTS_TOKEN")
+        self.account_id = os.environ.get("LINKEDIN_ACCOUNT_ID") or creds.get("LINKEDIN_ACCOUNT_ID")
 
         if not self.campaigns_token:
-            raise ValueError("LINKEDIN_CAMPAIGNS_TOKEN not found in .env, .credentials, or environment")
+            print(
+                "Error: LINKEDIN_CAMPAIGNS_TOKEN not found.\n"
+                "Run the linkedin-setup skill to configure credentials.",
+                file=sys.stderr,
+            )
+            sys.exit(1)
         if not self.account_id:
-            raise ValueError("LINKEDIN_ACCOUNT_ID not found in .env, .credentials, or environment")
+            print(
+                "Error: LINKEDIN_ACCOUNT_ID not found.\n"
+                "Run the linkedin-setup skill to configure credentials.",
+                file=sys.stderr,
+            )
+            sys.exit(1)
 
         print(f"✓ Credentials loaded: Account {self.account_id}")
         print(f"  Campaigns token: {self.campaigns_token[:10]}...")
