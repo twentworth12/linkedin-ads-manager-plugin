@@ -13,6 +13,15 @@ version: 0.1.0
 
 Manage LinkedIn ad campaigns programmatically via a Python CLI. Full campaign lifecycle: creation, cloning, budget management, targeting configuration, performance analytics, and batch operations.
 
+## Credential Handling
+
+Before asking the user for any API credentials, tokens, or account IDs, **always check the `.env` file in the project root first**:
+```bash
+cat .env 2>/dev/null
+```
+
+If the required credentials are present, load them silently and proceed — do not ask the user to provide them. Only ask for credentials if they are genuinely missing from `.env`.
+
 ## Setup
 
 Before using this skill, credentials must be configured. Run `/linkedin-setup` or set environment variables:
